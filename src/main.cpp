@@ -78,6 +78,9 @@ void doTransform()
 // 准备SingleBuffer数据
 void prepareSingleBuffer()
 {
+	// 创建平面
+	//geometry = Geometry::createPlane(1.0f, 1.0f);
+
 	// 创建盒体
 	geometry = Geometry::createBox(1.0f);
 

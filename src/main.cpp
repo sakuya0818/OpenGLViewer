@@ -155,12 +155,12 @@ void render()
 int main()
 {
 	// ³õÊ¼»¯´°Ìå
-	if (!Application::getInstance()->init(800, 600))
+	if (!Application::getInstance()->init(1600, 1200))
 	{
 		return -1;
 	}
 
-	glViewport(0, 0, 800, 600);
+	glViewport(0, 0, 1600, 1200);
 	glClearColor(0.2f, 0.3f, 0.2f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);

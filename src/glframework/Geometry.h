@@ -19,6 +19,7 @@ private:
 	GLuint mVao{ 0 };
 	GLuint mPosVbo{ 0 };
 	GLuint mUvVbo{ 0 };
+	GLuint mNormalVbo{ 0 };
 	GLuint mEbo{ 0 };
 
 	uint32_t mIndicesCount{ 0 };

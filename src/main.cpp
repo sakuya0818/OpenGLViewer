@@ -8,6 +8,10 @@
 #include "application/camera/TrackBallController.h"
 #include "glframework/Geometry.h"
 
+// 平行光
+glm::vec3 lightDirection = glm::vec3(-0.4f, -1.4f, -1.9f);
+glm::vec3 lightColor = glm::vec3(0.9f, 0.85f, 0.75f);
+
 GLuint vao;
 Shader* shader = nullptr;
 Texture* texture = nullptr;
@@ -143,6 +147,9 @@ void render()
 	shader->setMatrix4x4("transform", transform);
 	shader->setMatrix4x4("view", camera->getViewMatrix());
 	shader->setMatrix4x4("projection", camera->getProjectionMatrix());
+
+	shader->setVector3("lightDirection", lightDirection);
+	shader->setVector3("lightColor", lightColor);
 
 	// 绑定当前的vao
 	glBindVertexArray(geometry->getVao());

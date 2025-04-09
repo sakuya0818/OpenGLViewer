@@ -20,6 +20,8 @@ public:
 
 	void setVector3(const std::string& name, float* values);
 
+	void setVector3(const std::string& name, glm::vec3 value);
+
 	void setInt(const std::string& name, int value);
 
 	void setMatrix4x4(const std::string& name, glm::mat4 value);

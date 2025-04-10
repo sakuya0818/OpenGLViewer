@@ -11,6 +11,8 @@ in vec3 worldPosition;
 // 光源参数
 uniform vec3 lightDirection;
 uniform vec3 lightColor;
+// 环境光
+uniform vec3 ambientColor;
 // 相机世界坐标
 uniform vec3 cameraPos;
 // 镜面反射光强度
@@ -39,7 +41,10 @@ void main()
 	float specular = pow(clamp(dot(viewDirN, reflectDir), 0.0, 1.0), 64);
 	vec3 specularColor = specular * lightColor * specularIntensity;
 
-	vec3 finalColor = diffuseColor + specularColor;
+	// 环境光计算
+	vec3 ambient = ambientColor * objectColor;
+
+	vec3 finalColor = diffuseColor + specularColor + ambient;
 
 	FragColor = vec4(finalColor, 1.0);
 }

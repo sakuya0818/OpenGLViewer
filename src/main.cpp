@@ -14,6 +14,8 @@ glm::vec3 lightColor = glm::vec3(0.9f, 0.85f, 0.75f);
 
 float specularIntensity = 0.6f;
 
+glm::vec3 ambientColor = glm::vec3(0.2f, 0.2f, 0.2f);
+
 GLuint vao;
 Shader* shader = nullptr;
 Texture* texture = nullptr;
@@ -155,6 +157,7 @@ void render()
 
 	shader->setVector3("cameraPos", camera->mPosition);
 	shader->setFloat("specularIntensity", specularIntensity);
+	shader->setVector3("ambientColor", ambientColor);
 
 	// 绑定当前的vao
 	glBindVertexArray(geometry->getVao());

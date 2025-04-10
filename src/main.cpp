@@ -9,8 +9,10 @@
 #include "glframework/Geometry.h"
 
 // 平行光
-glm::vec3 lightDirection = glm::vec3(-0.4f, -1.4f, -1.9f);
+glm::vec3 lightDirection = glm::vec3(-1.0f, 0.0, -1.0f);
 glm::vec3 lightColor = glm::vec3(0.9f, 0.85f, 0.75f);
+
+float specularIntensity = 0.6f;
 
 GLuint vao;
 Shader* shader = nullptr;
@@ -144,12 +146,15 @@ void render()
 	shader->setInt("sampler", 0);
 	shader->setInt("sampler1", 1);
 
-	shader->setMatrix4x4("transform", transform);
+	shader->setMatrix4x4("model", transform);
 	shader->setMatrix4x4("view", camera->getViewMatrix());
 	shader->setMatrix4x4("projection", camera->getProjectionMatrix());
 
 	shader->setVector3("lightDirection", lightDirection);
 	shader->setVector3("lightColor", lightColor);
+
+	shader->setVector3("cameraPos", camera->mPosition);
+	shader->setFloat("specularIntensity", specularIntensity);
 
 	// 绑定当前的vao
 	glBindVertexArray(geometry->getVao());

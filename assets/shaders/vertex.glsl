@@ -5,17 +5,22 @@ layout(location = 2) in vec3 aNormal;
 
 out vec2 uv;
 out vec3 normal;
+out vec3 worldPosition;
 
-uniform mat4 transform;
+uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
 
 void main()
 {
-	vec4 position = vec4(aPos, 1.0);
-	position = projection * view * transform * position;
-	gl_Position = position;
-	//gl_Position = vec4(aPos, 1.0);
+	// 顶点转换为齐次坐标
+	vec4 transformPosition = vec4(aPos, 1.0);
+	// 模型变换
+	transformPosition = model * transformPosition;
+	// 计算世界坐标
+	worldPosition = transformPosition.xyz;
+	// 视图、投影变换
+	gl_Position = projection * view * transformPosition;
 	uv = aUV;
 	normal = aNormal;
 }

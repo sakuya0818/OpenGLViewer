@@ -29,6 +29,8 @@ set(GLFRAMEWORK_SOURCES
     src/glframework/shader.cpp
     src/glframework/texture.cpp
     src/glframework/Geometry.cpp
+    src/glframework/Object.cpp
+    src/glframework/material/material.cpp
 )
 
 set(SOURCES

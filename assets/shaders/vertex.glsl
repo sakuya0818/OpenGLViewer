@@ -22,5 +22,5 @@ void main()
 	// 视图、投影变换
 	gl_Position = projection * view * transformPosition;
 	uv = aUV;
-	normal = aNormal;
+	normal = transpose(inverse(mat3(model))) * aNormal;
 }

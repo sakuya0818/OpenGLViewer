@@ -30,11 +30,13 @@ set(GLFRAMEWORK_SOURCES
     src/glframework/texture.cpp
     src/glframework/Geometry.cpp
     src/glframework/Object.cpp
+    src/glframework/Mesh.cpp
     src/glframework/material/material.cpp
     src/glframework/material/phongMaterial.cpp
     src/glframework/light/light.cpp
     src/glframework/light/directionLight.cpp
     src/glframework/light/ambientLight.cpp
+    src/glframework/renderer/renderer.cpp
 )
 
 set(SOURCES

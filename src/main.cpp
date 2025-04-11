@@ -9,6 +9,12 @@
 #include "glframework/Geometry.h"
 #include "glframework/Mesh.h"
 #include "glframework/material/phongMaterial.h"
+#include "glframework/renderer/renderer.h"
+
+Renderer* renderer = nullptr;
+std::vector<Mesh*> meshes{};
+DirectionLight* dirLight = nullptr;
+AmbientLight* ambLight = nullptr;
 
 // 平行光
 glm::vec3 lightDirection = glm::vec3(-1.0f, 0.0, -1.0f);
@@ -72,7 +78,7 @@ void prepareSingleBuffer()
 // 准备Shader
 void prepareShader()
 {
-	shader = new Shader("assets/shaders/vertex.glsl", "assets/shaders/fragment.glsl");
+	shader = new Shader("assets/shaders/phong.vert", "assets/shaders/phong.frag");
 }
 
 // 准备Texture
@@ -95,50 +101,31 @@ void prepareCamera()
 
 void prepare()
 {
+	renderer = new Renderer();
+
 	// 创建几何
 	auto geometry = Geometry::createSphere(1.0f);
 
 	// 创建材质并配置参数
-	auto material = new PhongMaterial();
-	material->mShininess = 32.0f;
-	material->mDiffuseTexture = new Texture("assets/textures/pikaqiu.jpg", 0);
+	auto material01 = new PhongMaterial();
+	material01->mShininess = 10.0f;
+	material01->mDiffuseTexture = new Texture("assets/textures/pikaqiu.jpg", 0);
+
+	auto material02 = new PhongMaterial();
+	material02->mShininess = 10.0f;
+	material02->mDiffuseTexture = new Texture("assets/textures/111.jpg", 0);
 
 	// 创建Mesh
-	auto mesh = new Mesh(geometry, material);
-}
+	auto mesh01 = new Mesh(geometry, material01);
+	auto mesh02 = new Mesh(geometry, material02);
+	mesh02->setPosition(glm::vec3(2.0f, 0.0f, 0.0f));
 
-// 渲染
-void render()
-{
-	// 画布清理
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	meshes.push_back(mesh01);
+	meshes.push_back(mesh02);
 
-	// 绑定当前的program
-	shader->beigin();
-
-	shader->setInt("sampler", 0);
-	shader->setInt("sampler1", 1);
-
-	shader->setMatrix4x4("model", transform);
-	shader->setMatrix4x4("view", camera->getViewMatrix());
-	shader->setMatrix4x4("projection", camera->getProjectionMatrix());
-
-	shader->setVector3("lightDirection", lightDirection);
-	shader->setVector3("lightColor", lightColor);
-
-	shader->setVector3("cameraPos", camera->mPosition);
-	shader->setFloat("specularIntensity", specularIntensity);
-	shader->setVector3("ambientColor", ambientColor);
-
-	// 绑定当前的vao
-	glBindVertexArray(geometry->getVao());
-
-	// 绘制三角形
-	//glDrawArrays(GL_TRIANGLES, 0, 3);
-	glDrawElements(GL_TRIANGLES, geometry->getIndicesCount(), GL_UNSIGNED_INT, 0);
-	glBindVertexArray(0);
-
-	shader->end();
+	dirLight = new DirectionLight();
+	ambLight = new AmbientLight();
+	ambLight->mColor = glm::vec3(0.1f);
 }
 
 int main()
@@ -162,16 +149,14 @@ int main()
 	Application::getInstance()->setScrollCallback(OnScroll);
 
 	// 准备Shader和vao，vbo
-	prepareShader();
-	prepareSingleBuffer();
-	prepareTexture();
 	prepareCamera();
+	prepare();
 
 	// 执行窗体循环
 	while (Application::getInstance()->update())
 	{
 		cameraControl->update();
-		render();
+		renderer->render(meshes, camera, dirLight, ambLight);
 	}
 
 	// 释放资源

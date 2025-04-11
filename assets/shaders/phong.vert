@@ -11,6 +11,8 @@ uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
 
+uniform mat3 normalMatrix;
+
 void main()
 {
 	// 顶点转换为齐次坐标
@@ -22,5 +24,5 @@ void main()
 	// 视图、投影变换
 	gl_Position = projection * view * transformPosition;
 	uv = aUV;
-	normal = transpose(inverse(mat3(model))) * aNormal;
+	normal = normalMatrix * aNormal;
 }

@@ -17,6 +17,7 @@ uniform vec3 ambientColor;
 uniform vec3 cameraPos;
 // 镜面反射光强度
 uniform float specularIntensity;
+uniform float shiness;
 
 void main()
 {
@@ -38,7 +39,7 @@ void main()
 	// 计算镜面反射光照
 	vec3 reflectDir = normalize(reflect(lightDirN, normalN));
 	// 加64次方来控制镜面反射的光斑大小
-	float specular = pow(clamp(dot(viewDirN, reflectDir), 0.0, 1.0), 64);
+	float specular = pow(clamp(dot(viewDirN, reflectDir), 0.0, 1.0), shiness);
 	vec3 specularColor = specular * lightColor * specularIntensity;
 
 	// 环境光计算

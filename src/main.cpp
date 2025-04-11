@@ -7,6 +7,8 @@
 #include "application/camera/PerspectiveCamera.h"
 #include "application/camera/TrackBallController.h"
 #include "glframework/Geometry.h"
+#include "glframework/Mesh.h"
+#include "glframework/material/phongMaterial.h"
 
 // 平行光
 glm::vec3 lightDirection = glm::vec3(-1.0f, 0.0, -1.0f);
@@ -21,9 +23,6 @@ Shader* shader = nullptr;
 Texture* texture = nullptr;
 Texture* texture1 = nullptr;
 glm::mat4 transform(1.0);
-glm::mat4 viewMatrix(1.0);
-glm::mat4 orthoMatrix(1.0);
-glm::mat4 perspectiveMatrix(1.0);
 Geometry* geometry = nullptr;
 
 PerspectiveCamera* camera = nullptr;
@@ -55,32 +54,6 @@ void OnCursor(double xPos, double yPos)
 void OnScroll(double offset)
 {
 	cameraControl->onScroll(offset);
-}
-
-// 旋转变化
-void doRotationTransform()
-{
-	transform = glm::rotate(glm::identity<glm::mat4>(), glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0));
-}
-
-// 平移变化
-void doTranslationTransform()
-{
-	transform = glm::translate(glm::identity<glm::mat4>(), glm::vec3(0.5f, 0.0f, 0.0f));
-}
-
-// 缩放变换
-void doScaleTransform()
-{
-	transform = glm::scale(glm::identity<glm::mat4>(), glm::vec3(0.5f, 0.5f, 1.0f));
-}
-
-// 旋转和平移变换结合
-void doTransform()
-{
-	glm::mat4 rotateMat = glm::rotate(glm::identity<glm::mat4>(), glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0));
-	glm::mat4 translateMat = glm::translate(glm::identity<glm::mat4>(), glm::vec3(0.5f, 0.0f, 0.0f));
-	transform = translateMat * rotateMat;
 }
 
 // 准备SingleBuffer数据
@@ -120,20 +93,18 @@ void prepareCamera()
 	//std::cout << "111111111111111:" << glm::to_string(viewMatrix) << std::endl;
 }
 
-void prepareOrtho()
+void prepare()
 {
-	// 正交投影矩阵
-	// left:左边界，right:右边界，bottom:底边界，top:顶边界，near:近裁剪面，far:远裁剪面
-	orthoMatrix = glm::ortho(-2.0f, 2.0f, -2.0f, 2.0f, 0.1f, 100.0f);
-	std::cout << "222222222222222:" << glm::to_string(orthoMatrix) << std::endl;
-}
+	// 创建几何
+	auto geometry = Geometry::createSphere(1.0f);
 
-void preparePerspective()
-{
-	// 透视投影矩阵
-	// fovy:y轴的视野角度，aspect:宽高比，near:近裁剪面，far:远裁剪面
-	perspectiveMatrix = glm::perspective(glm::radians(60.0f), (float)Application::getInstance()->getWidth() / (float)Application::getInstance()->getHeight(), 0.1f, 100.0f);
-	std::cout << "333333333333333:" << glm::to_string(perspectiveMatrix) << std::endl;
+	// 创建材质并配置参数
+	auto material = new PhongMaterial();
+	material->mShininess = 32.0f;
+	material->mDiffuseTexture = new Texture("assets/textures/pikaqiu.jpg", 0);
+
+	// 创建Mesh
+	auto mesh = new Mesh(geometry, material);
 }
 
 // 渲染

@@ -12,4 +12,4 @@ public:
 public:
 	Texture* mDiffuseTexture = nullptr;
 	float mShininess = 32.0f;
-}
+};

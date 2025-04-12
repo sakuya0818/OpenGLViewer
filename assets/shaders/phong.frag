@@ -8,6 +8,35 @@ in vec2 uv;
 in vec3 normal;
 in vec3 worldPosition;
 
+struct DirectionalLight
+{
+	vec3 direction;
+	vec3 color;
+	float specularIntensity;
+	float intensity;
+};
+
+struct PointLight
+{
+	vec3 position;
+	vec3 color;
+	float specularIntensity;
+
+	float k2;
+	float k1;
+	float k0;
+};
+
+struct SpotLight
+{
+	vec3 position;
+	vec3 targetDirection;
+	vec3 color;
+	float outLine;
+	float innerLine;
+	float specularIntensity;
+};
+
 // 光源参数
 uniform vec3 lightDirection;
 uniform vec3 lightColor;

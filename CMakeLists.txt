@@ -36,6 +36,8 @@ set(GLFRAMEWORK_SOURCES
     src/glframework/light/light.cpp
     src/glframework/light/directionLight.cpp
     src/glframework/light/ambientLight.cpp
+    src/glframework/light/pointLight.cpp
+    src/glframework/light/spotLight.cpp
     src/glframework/renderer/renderer.cpp
 )
 

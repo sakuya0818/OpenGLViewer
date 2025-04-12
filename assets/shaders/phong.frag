@@ -13,7 +13,7 @@ struct DirectionalLight
 	vec3 direction;
 	vec3 color;
 	float specularIntensity;
-	float intensity;
+	float shiness;
 };
 
 struct PointLight
@@ -37,16 +37,31 @@ struct SpotLight
 	float specularIntensity;
 };
 
-// 光源参数
-uniform vec3 lightDirection;
-uniform vec3 lightColor;
+uniform DirectionalLight directionalLight;
+
 // 环境光
 uniform vec3 ambientColor;
 // 相机世界坐标
 uniform vec3 cameraPos;
-// 镜面反射光强度
-uniform float specularIntensity;
-uniform float shiness;
+
+// 计算漫反射光照
+vec3 calculateDiffuse(vec3 lightColor, vec3 objectColor, vec3 lightDir, vec3 normal)
+{
+	float diffuse = clamp(dot(-lightDir, normal), 0.0, 1.0);
+	vec3 diffuseColor = objectColor * diffuse * lightColor;
+	return diffuseColor;
+}
+
+// 计算镜面反射光照
+vec3 calculateSpecular(vec3 lightColor, vec3 lightDir, vec3 normal, vec3 viewDir, float intensity, float shiness)
+{
+	vec3 reflectDir = normalize(reflect(lightDir, normal));
+	// 加次方来控制镜面反射的光斑大小
+	float specular = pow(clamp(dot(viewDir, reflectDir), 0.0, 1.0), shiness);
+	vec3 specularColor = specular * lightColor * intensity;
+
+	return specularColor;
+}
 
 void main()
 {
@@ -58,18 +73,12 @@ void main()
 
 	// 归一化法向量和光源方向
 	vec3 normalN = normalize(normal);
-	vec3 lightDirN = normalize(lightDirection);
+	vec3 lightDirN = normalize(directionalLight.direction);
 	vec3 viewDirN = normalize(cameraPos - worldPosition);
 
-	// 计算漫反射光照
-	float diffuse = clamp(dot(-lightDirN, normalN), 0.0, 1.0);
-	vec3 diffuseColor = objectColor * diffuse * lightColor;
+	vec3 diffuseColor = calculateDiffuse(directionalLight.color, objectColor, lightDirN, normalN);
 
-	// 计算镜面反射光照
-	vec3 reflectDir = normalize(reflect(lightDirN, normalN));
-	// 加64次方来控制镜面反射的光斑大小
-	float specular = pow(clamp(dot(viewDirN, reflectDir), 0.0, 1.0), shiness);
-	vec3 specularColor = specular * lightColor * specularIntensity;
+	vec3 specularColor = calculateSpecular(directionalLight.color, lightDirN, normalN, viewDirN, directionalLight.specularIntensity, directionalLight.shiness);
 
 	// 环境光计算
 	vec3 ambient = ambientColor * objectColor;

@@ -50,10 +50,10 @@ void Renderer::render(const std::vector<Mesh*>& meshes, Camera* camera, Directio
 			auto normalMatrix = glm::mat3(glm::transpose(glm::inverse(mesh->getModelMatrix())));
 			shader->setMatrix3x3("normalMatrix", normalMatrix);
 			// 平行光
-			shader->setVector3("lightDirection", dirLight->mDirection);
-			shader->setVector3("lightColor", dirLight->mColor);
-			shader->setFloat("specularIntensity", dirLight->mSpecularIntensity);
-			shader->setFloat("shiness", phongMaterial->mShininess);
+			shader->setVector3("directionalLight.direction", dirLight->mDirection);
+			shader->setVector3("directionalLight.color", dirLight->mColor);
+			shader->setFloat("directionalLight.specularIntensity", dirLight->mSpecularIntensity);
+			shader->setFloat("directionalLight.shiness", phongMaterial->mShininess);
 			// 环境光
 			shader->setVector3("ambientColor", ambLight->mColor);
 			// 相机位置

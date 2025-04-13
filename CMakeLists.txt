@@ -47,6 +47,7 @@ set(GLFRAMEWORK_SOURCES
     src/glframework/texture.cpp
     src/glframework/Geometry.cpp
     src/glframework/Object.cpp
+    src/glframework/Scene.cpp
     src/glframework/Mesh.cpp
     src/glframework/material/material.cpp
     src/glframework/material/phongMaterial.cpp

@@ -8,6 +8,7 @@
 #include "application/camera/TrackBallController.h"
 #include "glframework/Geometry.h"
 #include "glframework/Mesh.h"
+#include "glframework/Scene.h"
 #include "glframework/material/phongMaterial.h"
 #include "glframework/renderer/renderer.h"
 
@@ -16,7 +17,7 @@
 #include "imgui/imgui_impl_opengl3.h"
 
 Renderer* renderer = nullptr;
-std::vector<Mesh*> meshes{};
+Scene* scene = nullptr;
 DirectionLight* dirLight = nullptr;
 AmbientLight* ambLight = nullptr;
 
@@ -117,9 +118,11 @@ void prepareCamera()
 void prepare()
 {
 	renderer = new Renderer();
+	scene = new Scene();
 
 	// 创建几何
 	auto geometry = Geometry::createSphere(1.0f);
+	auto geometry1 = Geometry::createBox(1.0f);
 
 	// 创建材质并配置参数
 	auto material01 = new PhongMaterial();
@@ -132,11 +135,11 @@ void prepare()
 
 	// 创建Mesh
 	auto mesh01 = new Mesh(geometry, material01);
-	auto mesh02 = new Mesh(geometry, material02);
+	auto mesh02 = new Mesh(geometry1, material02);
 	mesh02->setPosition(glm::vec3(2.0f, 0.0f, 0.0f));
 
-	meshes.push_back(mesh01);
-	meshes.push_back(mesh02);
+	mesh01->addChild(mesh02);
+	scene->addChild(mesh01);
 
 	dirLight = new DirectionLight();
 	ambLight = new AmbientLight();
@@ -173,7 +176,7 @@ int main()
 	{
 		renderer->setClearColor(clearColor);
 		cameraControl->update();
-		renderer->render(meshes, camera, dirLight, ambLight);
+		renderer->render(scene, camera, dirLight, ambLight);
 		renderIMGUI();
 	}
 

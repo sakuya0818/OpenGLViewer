@@ -2,6 +2,7 @@
 
 Object::Object()
 {
+	mType = ObjectType::Object_;
 }
 
 Object::~Object()
@@ -56,4 +57,16 @@ glm::mat4 Object::getModelMatrix()
 	model = glm::translate(glm::identity<glm::mat4>(), mPosition) * model;
 
 	return model;
+}
+
+void Object::addChild(Object* child)
+{
+	auto iter = std::find(mChildren.begin(), mChildren.end(), child);
+	if (iter != mChildren.end())
+	{
+		std::cout << "Object::addChild: child already exists" << std::endl;
+		return;
+	}
+	mChildren.push_back(child);
+	child->mParent = this;
 }

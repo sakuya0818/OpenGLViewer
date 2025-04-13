@@ -8,6 +8,7 @@
 #include "../light/directionLight.h"
 #include "../light/ambientLight.h"
 #include "../shader.h"
+#include "../Scene.h"
 
 class Renderer
 {
@@ -17,7 +18,14 @@ public:
 
 	// äÖÈ¾¹¦ÄÜº¯Êý
 	void render(
-		const std::vector<Mesh*>& meshes,
+		Scene *scene,
+		Camera* camera,
+		DirectionLight* dirLight,
+		AmbientLight* ambLight
+	);
+
+	void renderObject(
+		Object* object,
 		Camera* camera,
 		DirectionLight* dirLight,
 		AmbientLight* ambLight

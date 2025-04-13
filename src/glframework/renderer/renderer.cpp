@@ -12,7 +12,7 @@ Renderer::~Renderer()
 {
 }
 
-void Renderer::render(const std::vector<Mesh*>& meshes, Camera* camera, DirectionLight* dirLight, AmbientLight* ambLight)
+void Renderer::render(Scene* scene, Camera* camera, DirectionLight* dirLight, AmbientLight* ambLight)
 {
 	// 开启深度检测
 	glEnable(GL_DEPTH_TEST);
@@ -21,18 +21,22 @@ void Renderer::render(const std::vector<Mesh*>& meshes, Camera* camera, Directio
 	// 画布清理
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	// 绘制Mesh
-	for (int i = 0; i < meshes.size(); i++)
+	// 将Scene当做根节点渲染
+	renderObject(scene, camera, dirLight, ambLight);
+}
+
+void Renderer::renderObject(Object* object, Camera* camera, DirectionLight* dirLight, AmbientLight* ambLight)
+{
+	// 判断当前物体类型，是Mesh就渲染
+	if (object->getType() == ObjectType::Mesh_)
 	{
-		auto mesh = meshes[i];
+		auto mesh = static_cast<Mesh*>(object);
 		auto geometry = mesh->mGeometry;
 		auto material = mesh->mMaterial;
-		
 		// 决定使用哪个Shader
 		Shader* shader = pickShader(material->mType);
 		// 更新Shader的uniform变量
 		shader->beigin();
-
 		switch (material->mType)
 		{
 		case MaterialType::MaterialTypePhong:
@@ -63,14 +67,18 @@ void Renderer::render(const std::vector<Mesh*>& meshes, Camera* camera, Directio
 		default:
 			break;
 		}
-
-		// 绑定vao
 		glBindVertexArray(geometry->getVao());
-
-		// 执行绘制命令
 		glDrawElements(GL_TRIANGLES, geometry->getIndicesCount(), GL_UNSIGNED_INT, 0);
+		glBindVertexArray(0);
 
 		shader->end();
+	}
+
+	// 递归渲染子物体
+	auto children = object->getChildren();
+	for (int i = 0; i < children.size(); i++)
+	{
+		renderObject(children[i], camera, dirLight, ambLight);
 	}
 }
 

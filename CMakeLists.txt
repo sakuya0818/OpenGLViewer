@@ -5,14 +5,31 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 
 add_subdirectory(deps/glfw)
-
 add_subdirectory(deps/glm)
+
+set(ASSIMP_BUILD_ALL_IMPORTERS_BY_DEFAULT OFF CACHE BOOL "" FORCE)
+set(ASSIMP_BUILD_ALL_EXPORTERS_BY_DEFAULT OFF CACHE BOOL "" FORCE)
+set(ASSIMP_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
+set(ASSIMP_BUILD_COLLADA_IMPORTER TRUE)
+set(ASSIMP_BUILD_OBJ_IMPORTER TRUE)
+set(ASSIMP_BUILD_FBX_IMPORTER TRUE)
+add_subdirectory(deps/assimp)
 
 file(GLOB ASSETS "./assets")
 file(COPY ${ASSETS} DESTINATION ${CMAKE_BINARY_DIR})
 
 set(GLAD_SOURCES
     deps/glad/src/glad.c
+)
+set(IMGUI_SOURCES
+    deps/imgui/imgui.cpp
+    deps/imgui/imgui_demo.cpp
+    deps/imgui/imgui_draw.cpp
+    deps/imgui/imgui_tables.cpp
+    deps/imgui/imgui_widgets.cpp
+    deps/imgui/imgui_impl_glfw.cpp
+    deps/imgui/imgui_impl_opengl3.cpp
 )
 
 set(APPLICATION_SOURCES
@@ -44,6 +61,7 @@ set(GLFRAMEWORK_SOURCES
 set(SOURCES
     src/main.cpp
     ${GLAD_SOURCES}
+    ${IMGUI_SOURCES}
     ${APPLICATION_SOURCES}
     ${GLFRAMEWORK_SOURCES}
 )
@@ -59,4 +77,5 @@ target_include_directories(${PROJECT_NAME}
 target_link_directories(${PROJECT_NAME} PRIVATE deps)
 target_link_libraries(${PROJECT_NAME}
     glfw
+    assimp
 )

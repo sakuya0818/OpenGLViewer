@@ -23,6 +23,8 @@ public:
 		AmbientLight* ambLight
 	);
 
+	void setClearColor(glm::vec3 color);
+
 private:
 	Shader* pickShader(MaterialType type);
 

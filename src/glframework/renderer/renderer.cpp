@@ -74,6 +74,11 @@ void Renderer::render(const std::vector<Mesh*>& meshes, Camera* camera, Directio
 	}
 }
 
+void Renderer::setClearColor(glm::vec3 color)
+{
+	glClearColor(color.x, color.y, color.z, 1.0f);
+}
+
 Shader* Renderer::pickShader(MaterialType type)
 {
 	Shader* result = nullptr;

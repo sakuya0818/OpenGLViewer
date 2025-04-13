@@ -21,6 +21,8 @@ public:
 
 	void destory();
 
+	GLFWwindow* getWindow() const { return mWindow; }
+
 	uint32_t getWidth() const { return mWidth; }
 	uint32_t getHeight() const { return mHeight; }
 

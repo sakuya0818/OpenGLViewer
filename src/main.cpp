@@ -11,6 +11,10 @@
 #include "glframework/material/phongMaterial.h"
 #include "glframework/renderer/renderer.h"
 
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_glfw.h"
+#include "imgui/imgui_impl_opengl3.h"
+
 Renderer* renderer = nullptr;
 std::vector<Mesh*> meshes{};
 DirectionLight* dirLight = nullptr;
@@ -62,15 +66,52 @@ void OnScroll(double offset)
 	cameraControl->onScroll(offset);
 }
 
+void initIMGUI()
+{
+	 ImGui::CreateContext();
+	 ImGui::StyleColorsDark();
+	
+	 // Setup Platform/Renderer bindings
+	 ImGui_ImplGlfw_InitForOpenGL(Application::getInstance()->getWindow(), true);
+	 ImGui_ImplOpenGL3_Init("#version 460");
+
+	 //ImGuiIO& io = ImGui::GetIO(); (void)io;
+	 //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
+	 //io.ConfigFlags |= ImGuiConfigFlags_DockingEnable; // Enable Docking
+	 //io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable; // Enable Multi-Viewport / Platform Windows
+}
+
+glm::vec3 clearColor{ 0.0f, 0.0f, 0.0f };
+
+void renderIMGUI()
+{
+	// 开启当前的IMGUI渲染
+	ImGui_ImplOpenGL3_NewFrame();
+	ImGui_ImplGlfw_NewFrame();
+	ImGui::NewFrame();
+	// IMGUI渲染当前窗口的控件，从上到下渲染
+	ImGui::Begin("Hello, world!");
+	ImGui::Text("This is some useful text.");
+	ImGui::Button("Test Button", ImVec2(40, 20));
+	ImGui::ColorEdit3("clear color", (float*)&clearColor);
+	ImGui::End();
+	// UI渲染
+	ImGui::Render();
+	// 获取当前窗口的大小
+	int displayWidth, displayHeight;
+	glfwGetFramebufferSize(Application::getInstance()->getWindow(), &displayWidth, &displayHeight);
+	// 重置视口大小
+	glViewport(0, 0, displayWidth, displayHeight);
+
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
+
 // 准备相机
 void prepareCamera()
 {
 	camera = new PerspectiveCamera(60.0f, (float)Application::getInstance()->getWidth() / (float)Application::getInstance()->getHeight(), 0.1f, 1000.0f);
 	cameraControl = new TrackBallController();
 	cameraControl->setCamera(camera);
-
-	//viewMatrix = glm::lookAt(glm::vec3(0.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	//std::cout << "111111111111111:" << glm::to_string(viewMatrix) << std::endl;
 }
 
 void prepare()
@@ -125,12 +166,15 @@ int main()
 	// 准备Shader和vao，vbo
 	prepareCamera();
 	prepare();
+	initIMGUI();
 
 	// 执行窗体循环
 	while (Application::getInstance()->update())
 	{
+		renderer->setClearColor(clearColor);
 		cameraControl->update();
 		renderer->render(meshes, camera, dirLight, ambLight);
+		renderIMGUI();
 	}
 
 	// 释放资源

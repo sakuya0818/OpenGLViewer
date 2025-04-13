@@ -20,6 +20,10 @@ public:
 	void rotateY(float angle);
 	void rotateZ(float angle);
 
+	void setAngleX(float angle);
+	void setAngleY(float angle);
+	void setAngleZ(float angle);
+
 	void setscale(glm::vec3 scale);
 
 	glm::mat4 getModelMatrix();

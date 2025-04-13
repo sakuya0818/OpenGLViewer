@@ -57,6 +57,7 @@ set(GLFRAMEWORK_SOURCES
     src/glframework/light/pointLight.cpp
     src/glframework/light/spotLight.cpp
     src/glframework/renderer/renderer.cpp
+    src/glframework/tools/tools.cpp
 )
 
 set(SOURCES

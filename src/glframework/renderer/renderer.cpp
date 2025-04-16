@@ -68,6 +68,7 @@ void Renderer::renderObject(Object* object, Camera* camera, DirectionLight* dirL
 			break;
 		}
 		glBindVertexArray(geometry->getVao());
+		// 第三个参数是模型顶点的个数
 		glDrawElements(GL_TRIANGLES, geometry->getIndicesCount(), GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
 

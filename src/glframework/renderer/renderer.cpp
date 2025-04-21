@@ -92,6 +92,7 @@ Shader* Renderer::pickShader(MaterialType type)
 {
 	Shader* result = nullptr;
 
+	// 根据类型选择使用的Shader
 	switch (type)
 	{
 	case MaterialType::MaterialTypePhong:

@@ -85,7 +85,7 @@ void Renderer::renderObject(Object* object, Camera* camera, DirectionLight* dirL
 
 void Renderer::setClearColor(glm::vec3 color)
 {
-	// 给上下文设置清屏
+	// 给上下文设置清屏颜色
 	glClearColor(color.x, color.y, color.z, 1.0f);
 }
 

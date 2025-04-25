@@ -17,40 +17,16 @@ void Object::setPosition(glm::vec3 pos)
 void Object::rotateX(float angle)
 {
 	mAngleX += angle;
-	if (mAngleX > 360.0f)
-	{
-		mAngleX -= 360.0f;
-	}
-	else if (mAngleX < 0.0f)
-	{
-		mAngleX += 360.0f;
-	}
 }
 
 void Object::rotateY(float angle)
 {
 	mAngleY += angle;
-	if (mAngleY > 360.0f)
-	{
-		mAngleY -= 360.0f;
-	}
-	else if (mAngleY < 0.0f)
-	{
-		mAngleY += 360.0f;
-	}
 }
 
 void Object::rotateZ(float angle)
 {
 	mAngleZ += angle;
-	if (mAngleZ > 360.0f)
-	{
-		mAngleZ -= 360.0f;
-	}	
-	else if (mAngleZ < 0.0f)
-	{
-		mAngleZ += 360.0f;
-	}
 }
 
 void Object::setAngleX(float angle)

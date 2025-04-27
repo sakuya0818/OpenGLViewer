@@ -154,6 +154,7 @@ int main()
 		return -1;
 	}
 
+	// 初始化视口大小，并设置清屏颜色
 	glViewport(0, 0, 1600, 1200);
 	glClearColor(0.2f, 0.3f, 0.2f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
